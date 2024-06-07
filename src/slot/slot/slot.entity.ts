@@ -1,18 +1,23 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { AppointmentEntity } from '../../appointment/appointment/appointment.entity';
+import { Entity, Column, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../commons/base.entity';
+import { AutoMap } from '@automapper/classes';
+import { AppointmentEntity } from '../../appointment/appointment/appointment.entity';
 
-@Entity()
+@Entity('slots')
 export class SlotEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'time' })
+  @AutoMap()
+  @Column({ type: 'timestamptz' })
   startTime: Date;
 
-  @Column({ type: 'time' })
+  @AutoMap()
+  @Column({ type: 'timestamptz' })
   endTime: Date;
 
-  @ManyToOne(() => AppointmentEntity, (app) => app.slots)
-  appointment: AppointmentEntity;
+  @AutoMap()
+  @Column({ type: 'date' })
+  date: Date;
+
+  @AutoMap(() => AppointmentEntity)
+  @OneToOne(() => AppointmentEntity, (appointment) => appointment.slot)
+  appointment: boolean;
 }

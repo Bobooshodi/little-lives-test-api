@@ -8,5 +8,6 @@ import { SlotEntity } from './slot/slot.entity';
   imports: [TypeOrmModule.forFeature([SlotEntity])],
   providers: [SlotService],
   controllers: [SlotController],
+  exports: [SlotService],
 })
 export class SlotModule {}

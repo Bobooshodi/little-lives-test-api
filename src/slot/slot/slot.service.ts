@@ -2,23 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SlotEntity } from './slot.entity';
+import { BaseService } from '../../commons/base.service';
+import { Slot } from './slot.model';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 
 @Injectable()
-export class SlotService {
+export class SlotService extends BaseService<SlotEntity, Slot> {
   constructor(
+    @InjectMapper() mapper: Mapper,
     @InjectRepository(SlotEntity)
-    private repository: Repository<SlotEntity>,
-  ) {}
-
-  findAll(): Promise<SlotEntity[]> {
-    return this.repository.find();
+    protected repository: Repository<SlotEntity>,
+  ) {
+    super(mapper);
   }
 
-  findOne(id: number): Promise<SlotEntity | null> {
-    return this.repository.findOneBy({ id });
-  }
+  entity = SlotEntity;
+  model = Slot;
 
-  async remove(id: number): Promise<void> {
-    await this.repository.delete(id);
+  async findAll(options = {}): Promise<Slot[]> {
+    const records: SlotEntity[] = await this.repository.find(options);
+
+    return this.mapper.mapArray(records, this.entity, this.model);
   }
 }

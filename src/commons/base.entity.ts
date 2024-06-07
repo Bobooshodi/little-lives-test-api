@@ -6,21 +6,27 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AutoMap } from '@automapper/classes';
 
-export abstract class BaseEntity {
+export class BaseEntity {
+  @AutoMap()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @AutoMap()
   @Column()
   @Generated('uuid')
   uuid: string;
 
+  @AutoMap()
   @CreateDateColumn()
   createdDate: Date;
 
+  @AutoMap()
   @UpdateDateColumn()
   updatedDate: Date;
 
+  @AutoMap()
   @DeleteDateColumn()
   deletedDate: Date;
 }
